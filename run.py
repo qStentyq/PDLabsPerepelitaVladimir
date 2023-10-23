@@ -9,7 +9,7 @@ def create_directory(directory):
         os.makedirs(directory)
 
 # Функция для загрузки изображений
-#1 page = 30 images
+
 def download_images(search_query, output_directory, num_pages):
     create_directory(output_directory)
     base_url = "https://yandex.ru/images/search"
@@ -32,7 +32,7 @@ def download_images(search_query, output_directory, num_pages):
             # print(img_tag)
             img_url = img_tag["src"]
             img_url = urllib.parse.urljoin(base_url, img_url)
-            # print(img_url)
+            print(img_url)
             img_data = requests.get(img_url).content
             # print(img_data)
 
@@ -44,12 +44,14 @@ def download_images(search_query, output_directory, num_pages):
             with open(file_path, 'wb') as img_file:
                 img_file.write(img_data)
 
-# Загрузка изображений polar bear
-# download_images("polar bear", "dataset/polar_bear", 50)
+# # Загрузка изображений polar bear #30 страниц = 900 изображений
+# download_images("polar bear", "dataset/polar_bear", 30)
 
-# Загрузка изображений brown bear
-download_images("brown bear", "dataset/brown_bear", 10)
-# download_images("dota 2", "dataset/pussy", 10)
+# # Загрузка изображений brown bear, 30 страниц = 900 изображений
+# download_images("brown bear", "dataset/brown_bear", 30)
+
+download_images("Gaming Laptops", "dataset/gaming_laptops", 10)
+
 
 
 
