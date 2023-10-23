@@ -2,5 +2,5 @@
 /shelf/
 .idea/workspace.xml
 /dataset/**/*.jpg 
-/random_dataset/**/*.jpg
-/renamed_dataset/**/*.jpg
+/random_dataset/*.jpg
+/renamed_dataset/*.jpg
