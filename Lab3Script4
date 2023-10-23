@@ -1,0 +1,28 @@
+import os
+import random
+
+# Функция для получения следующего экземпляра класса
+def get_next_instance(class_label, dataset_path):
+
+    instances = []  # Создаем пустой список для хранения экземпляров класса
+    for root, _, files in os.walk(os.path.join(dataset_path, class_label)):  # Рекурсивно обходим файлы и директории в папке, соответствующей метке класса
+        for file in files:
+            if file.endswith(".jpg"):  
+                instances.append(os.path.join(root, file))  # Добавляем абсолютный путь к изображению в список instances
+    return iter(instances)  # Возвращаем итератор для последовательного доступа к экземплярам
+
+# Пример использования функции
+class_label = 'polar_bear'  # Указываем метку класса, для которой хотим получить экземпляр
+dataset_path = 'dataset'  # Указываем путь к директории с данными
+next_instance_generator = get_next_instance(class_label, dataset_path)  # Получаем итератор для класса
+next_instance = next(next_instance_generator, None)  # Получаем следующий экземпляр из итератора
+
+
+while next_instance:
+    print("Следующий экземпляр класса:", next_instance)
+    next_instance = next(next_instance_generator, None) 
+
+print('Экземпляры класса закончились')
+
+
+
