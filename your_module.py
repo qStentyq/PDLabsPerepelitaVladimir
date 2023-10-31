@@ -2,6 +2,9 @@ import os
 import csv
 import shutil
 import random
+from bs4 import BeautifulSoup
+import urllib.parse
+import requests
 
 def create_annotation_file(dataset_path, annotation_file):
     with open(annotation_file, 'w', newline='') as csvfile: # Открываем файл для записи
@@ -48,3 +51,44 @@ def get_next_instance(class_label, dataset_path):
                 instances.append(os.path.join(root, file))  # Добавляем абсолютный путь к изображению в список instances
     print(instances)
     return iter(instances)  # Возвращаем итератор для последовательного доступа к экземплярам
+
+def create_directory(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+# Функция для загрузки изображений
+
+def download_images(search_query, output_directory, num_pages):
+    create_directory(output_directory)
+    base_url = "https://yandex.ru/images/search"
+
+    for i in range(num_pages):
+        query_params = {
+            "text": search_query + str(i),
+        }
+
+        img_tags = []
+        response = requests.get(base_url, params=query_params)
+        print(response.url)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        print(soup)
+        img_tags = soup.find_all("img", {"class": "serp-item__thumb"}) 
+       
+        
+
+        for img_tag in img_tags:
+            # print(img_tag)
+            img_url = img_tag["src"]
+            img_url = urllib.parse.urljoin(base_url, img_url)
+            print(img_url)
+            img_data = requests.get(img_url).content
+            # print(img_data)
+
+            # Создаем имя файла в формате 0000.jpg, 0001.jpg и т.д.
+            filename = f"{i * len(img_tags) + img_tags.index(img_tag):04d}.jpg"
+            file_path = os.path.join(output_directory, filename)
+
+            # Записываем изображение в файл
+            with open(file_path, 'wb') as img_file:
+                img_file.write(img_data)
+

@@ -26,8 +26,6 @@ def download_images(search_query, output_directory, num_pages):
         print(soup)
         img_tags = soup.find_all("img", {"class": "serp-item__thumb"}) 
        
-        
-
         for img_tag in img_tags:
             # print(img_tag)
             img_url = img_tag["src"]
